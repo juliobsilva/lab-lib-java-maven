@@ -30,7 +30,7 @@ jobs:
             username:  ${{ secrets.NEXUS_USERNAME }}
             password:  ${{ secrets.NEXUS_PASSWORD }}
             format: maven2
-            repository: repo-teste
+            repository: maven-public
             coordinates: groupId=lab-lib-java-mave.com artifactId=lib-java version=0.0.1-SNAPSHOT
             assets: extension=jar
             filename: ./target/${{ steps.package-name.outputs.package }}.jar
