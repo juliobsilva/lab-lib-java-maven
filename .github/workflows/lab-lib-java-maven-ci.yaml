@@ -17,11 +17,19 @@ jobs:
             java-version: '17'
 
         - name: Build with Maven
-          run: mvn clean install
+          run: mvn package --file pom.xml
 
-        - name: Upload to Nexus
-          run: mvn deploy -DaltDeploymentRepository=lab-lib-java-mave::default::${{ env.NEXUS_URL }}
-          env:
-                NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
-                NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
-                NEXUS_URL:      ${{ secrets.NEXUS_URL }}
+        - name: Nexus Repo Publish
+          uses: sonatype-nexus-community/nexus-repo-github-action@master
+          with:
+            serverUrl: http://172.172.38.150:8081/
+            username:  ${{ secrets.NEXUS_USERNAME }}
+            password:  ${{ secrets.NEXUS_PASSWORD }}
+            format: maven2
+            repository: repo-teste
+            coordinates: groupId=lab-lib-java-mave.com artifactId=lib-java version=0.0.1-SNAPSHOT
+            assets: extension=jar
+            filename: ./target/app-1.0.0.jar
+
+        - name: Build with Maven
+          run: mvn clean install
