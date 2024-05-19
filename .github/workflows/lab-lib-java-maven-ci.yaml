@@ -20,7 +20,7 @@ jobs:
           run: mvn clean install
 
         - name: Upload to Nexus
-          run: mvn deploy -DaltDeploymentRepository=${{github.repository}}::default::${{ env.NEXUS_URL }}
+          run: mvn deploy -X -DaltDeploymentRepository=${{github.repository}}::default::${{ env.NEXUS_URL }}
           env:
                 NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
                 NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
