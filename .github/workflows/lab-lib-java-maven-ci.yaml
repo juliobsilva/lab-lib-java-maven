@@ -29,7 +29,7 @@ jobs:
         - name: Nexus Repo Publish
           uses: sonatype-nexus-community/nexus-repo-github-action@master
           with:
-            serverUrl: http://172.172.38.150:8081/
+            serverUrl: ${{ secrets.NEXUS_URL }}
             username:  ${{ secrets.NEXUS_USERNAME }}
             password:  ${{ secrets.NEXUS_PASSWORD }}
             format: maven2
