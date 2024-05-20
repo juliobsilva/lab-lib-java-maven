@@ -41,5 +41,11 @@
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+    <snapshotRepository>
+        <id>nexus</id>
+        <url>http://172.172.38.150:8081/repository/maven-snapshots/</url>
+    </snapshotRepository>
+</distributionManagement>
 
 </project>
