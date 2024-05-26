@@ -22,13 +22,13 @@ jobs:
       with:
         servers: |
           [{
-            "id": "nexus",
+            "id": "github",
             "username": "${{ secrets.G_USER }}",
             "password": "${{ secrets.G_TOKEN }}"
           }]
         mirrors: |
           [{
-            "id": "nexus",
+            "id": "github",
             "name": "Central Repository",
             "mirrorOf": "central",
             "url": "https://maven.pkg.github.com/juliobsilva/lab-lib-java-maven"
