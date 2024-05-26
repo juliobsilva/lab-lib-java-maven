@@ -42,10 +42,11 @@
 		</plugins>
 	</build>
 	<distributionManagement>
-    <snapshotRepository>
-        <id>github</id>
-        <url>https://maven.pkg.github.com/juliobsilva/lab-lib-java-maven</url>
-    </snapshotRepository>
-</distributionManagement>
+		<repository>
+     		<id>github</id>
+     		<name>GitHub OWNER Apache Maven Packages</name>
+     		<url>https://maven.pkg.github.com/juliobsilva/lab-lib-java-maven</url>
+   		</repository>
+	</distributionManagement>
 
 </project>
