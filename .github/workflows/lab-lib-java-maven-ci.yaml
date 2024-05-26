@@ -47,7 +47,7 @@ jobs:
             retention-days: 7
 
         - name: Listando arquivos
-          run: ls -l ./target
+          run: ls -l ./
 
         - name: Upload Package to Nexus
           run: mvn clean deploy -Drelease=true -Dmaven.source.skip=true -Dmaven.test.skip=true -s settings.xml -f pom.xml
