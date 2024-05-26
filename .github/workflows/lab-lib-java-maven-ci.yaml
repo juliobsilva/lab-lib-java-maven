@@ -1,74 +1,60 @@
 name: Lib Java
 
 on:
-    push
+  push:
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
+  build:
+    runs-on: ubuntu-latest
 
-        - name: Set up JDK
-          uses: actions/setup-java@v4
-          with:
-            distribution: 'adopt'
-            java-version: '17'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-        - name: Setup Maven Settings
-          uses: s4u/maven-settings-action@v2.8.0
-          with:
-            servers: |
-              [{
-                "id": "nexus",
-                "username": "${{ secrets.G_USER }}",
-                "password": "${{ secrets.G_TOKEN }}"
-              }]
-            mirrors: |
-              [{
-                "id": "nexus",
-                "name": "Central Repository",
-                "mirrorOf": "central",
-                "url": "https://maven.pkg.github.com/juliobsilva/lab-lib-java-maven"
-              }]
-            path: './settings.xml'
-            override: false
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'adopt'
+        java-version: '17'
 
-        #realiza o build do artefato
-        - name: Build artefato
-          run: >
-            mvn clean verify -Drelease=true -Dmaven.source.skip=true -f pom.xml -s ./settings.xml
-        
-        - name: Get package name
-          id: package-name
-          run: echo "::set-output name=package::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.build.finalName}' --non-recursive exec:exec)"
+    - name: Setup Maven Settings
+      uses: s4u/maven-settings-action@v2.8.0
+      with:
+        servers: |
+          [{
+            "id": "nexus",
+            "username": "${{ secrets.G_USER }}",
+            "password": "${{ secrets.G_TOKEN }}"
+          }]
+        mirrors: |
+          [{
+            "id": "nexus",
+            "name": "Central Repository",
+            "mirrorOf": "central",
+            "url": "https://maven.pkg.github.com/juliobsilva/lab-lib-java-maven"
+          }]
+        path: './settings.xml'
+        override: false
 
-        - name: Upload build artifacts
-          uses: actions/upload-artifact@v4
-          with:
-            name: ${{ steps.package-name.outputs.package }}
-            path: ./${{ steps.package-name.outputs.package }}*.jar
-            retention-days: 7
+    - name: Build artifact
+      run: mvn clean verify -Drelease=true -Dmaven.source.skip=true -f pom.xml -s ./settings.xml
 
-        - name: Listando arquivos
-          run: ls -l ./
+    - name: Get package name
+      id: package-name
+      run: echo "::set-output name=package::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.build.finalName}' --non-recursive exec:exec)"
 
-        - name: Upload Package to Nexus
-          run: mvn clean deploy -Drelease=true -Dmaven.source.skip=true -Dmaven.test.skip=true -s settings.xml -f pom.xml
-              
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.package-name.outputs.package }}
+        path: ./target/${{ steps.package-name.outputs.package }}*.jar
+        retention-days: 7
 
-        ## - name: Nexus Repo Publish
-        #   uses: sonatype-nexus-community/nexus-repo-github-action@master
-        #   with:
-        #     serverUrl: ${{ github.token }}
-        #     username:  ${{ secrets.NEXUS_USERNAME }}
-        #     password:  ${{ secrets.NEXUS_PASSWORD }}
-        #     format: maven2
-        #     repository: maven-snapshots
-        #     coordinates: groupId=lab-lib-java-mave.com artifactId=lib-java version=0.0.1-SNAPSHOT
-        #     assets: extension=jar
-        #     filename: ./target/${{ steps.package-name.outputs.package }}.jar
+    - name: List files
+      run: ls -l ./target
 
-        - name: Build with Maven
-          run: mvn clean install
+    - name: Upload Package to Nexus
+      run: mvn clean deploy -Drelease=true -Dmaven.source.skip=true -Dmaven.test.skip=true -s settings.xml -f pom.xml
+
+    - name: Build with Maven
+      run: mvn clean install
