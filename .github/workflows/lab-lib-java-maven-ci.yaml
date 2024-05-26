@@ -35,6 +35,11 @@ jobs:
             path: './settings.xml'
             override: false
 
+        #realiza o build do artefato
+        - name: Build artefato
+          run: >
+            mvn clean verify -Drelease=true -Dmaven.source.skip=true -f pom.xml -s ./settings.xml
+        
         - name: Get package name
           id: package-name
           run: echo "::set-output name=package::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.build.finalName}' --non-recursive exec:exec)"
