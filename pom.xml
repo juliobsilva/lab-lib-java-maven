@@ -43,7 +43,7 @@
 	</build>
 	<distributionManagement>
 		<repository>
-     		<id>github</id>
+     		<id>central</id>
      		<name>GitHub OWNER Apache Maven Packages</name>
      		<url>https://maven.pkg.github.com/juliobsilva/lab-lib-java-maven</url>
    		</repository>
