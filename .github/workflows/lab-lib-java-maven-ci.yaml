@@ -18,26 +18,31 @@ jobs:
         java-version: '17'
 
     - name: Setup Maven Settings
-      uses: s4u/maven-settings-action@v2.8.0
-      with:
-        servers: |
-          [{
-            "id": "github",
-            "username": "${{ secrets.G_USER }}",
-            "password": "${{ secrets.G_TOKEN }}"
-          }]
-        mirrors: |
-          [{
-            "id": "github",
-            "name": "Central Repository",
-            "mirrorOf": "central",
-            "url": "https://maven.pkg.github.com/juliobsilva/lab-lib-java-maven"
-          }]
-        path: './settings.xml'
-        override: false
+      run: |
+        echo "<settings>
+                <servers>
+                  <server>
+                    <id>github</id>
+                    <username>${{ secrets.G_USER }}</username>
+                    <password>${{ secrets.G_TOKEN }}</password>
+                  </server>
+                </servers>
+                <mirrors>
+                  <mirror>
+                    <id>nexus</id>
+                    <mirrorOf>central</mirrorOf>
+                    <url>https://maven.pkg.github.com/juliobsilva/lab-lib-java-maven</url>
+                  </mirror>
+                  <mirror>
+                    <id>central</id>
+                    <mirrorOf>central</mirrorOf>
+                    <url>https://repo.maven.apache.org/maven2</url>
+                  </mirror>
+                </mirrors>
+              </settings>" > $HOME/.m2/settings.xml
 
     - name: Build artifact
-      run: mvn clean verify -Drelease=true -Dmaven.source.skip=true -f pom.xml -s ./settings.xml
+      run: mvn clean verify -Drelease=true -Dmaven.source.skip=true -f pom.xml
 
     - name: Get package name
       id: package-name
@@ -54,7 +59,7 @@ jobs:
       run: ls -l ./target
 
     - name: Upload Package to Nexus
-      run: mvn clean deploy -Drelease=true -Dmaven.source.skip=true -Dmaven.test.skip=true -s settings.xml -f pom.xml
+      run: mvn clean deploy -Drelease=true -Dmaven.source.skip=true -Dmaven.test.skip=true -s $HOME/.m2/settings.xml -f pom.xml
 
     - name: Build with Maven
       run: mvn clean install
