@@ -43,8 +43,8 @@
 	</build>
 	<distributionManagement>
     <snapshotRepository>
-        <id>nexus</id>
-        <url>http://172.172.38.150:8081/repository/maven-snapshots/</url>
+        <id>github</id>
+        <url>https://maven.pkg.github.com/juliobsilva/lab-lib-java-maven</url>
     </snapshotRepository>
 </distributionManagement>
 
