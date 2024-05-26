@@ -16,20 +16,41 @@ jobs:
             distribution: 'adopt'
             java-version: '17'
 
-        - name: Build with Maven
-          run: mvn package --file pom.xml
+        - name: Setup Maven Settings
+          uses: s4u/maven-settings-action@v2.8.0
+          with:
+            servers: |
+              [{
+                "id": "nexus",
+                "username": "${{ secrets.G_USER }}",
+                "password": "${{ secrets.G_TOKEN }}"
+              }]
+            mirrors: |
+              [{
+                "id": "nexus",
+                "name": "Central Repository",
+                "mirrorOf": "central",
+                "url": "https://maven.pkg.github.com/juliobsilva/lab-lib-java-maven"
+              }]
+            path: './settings.xml'
+            override: false
 
         - name: Get package name
           id: package-name
           run: echo "::set-output name=package::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.build.finalName}' --non-recursive exec:exec)"
 
+        - name: Upload build artifacts
+          uses: actions/upload-artifact@v4
+          with:
+            name: ${{ steps.package-name.outputs.package }}
+            path: ${{ github.workspace }}/target/${{ steps.package-name.outputs.package }}*.jar
+            retention-days: 7
+
         - name: Listando arquivos
           run: ls -l ./target/${{ steps.package-name.outputs.package }}.jar
 
-        - name: Nexus Repo Publish
-          run: mvn deploy
-          env:
-            GITHUB_TOKEN: ${{ secrets.G.TOKEN }}
+        - name: Upload Package to Nexus
+          run: mvn clean deploy -Drelease=true -Dmaven.source.skip=true -Dmaven.test.skip=true -s settings.xml -f pom.xml
               
 
         ## - name: Nexus Repo Publish
