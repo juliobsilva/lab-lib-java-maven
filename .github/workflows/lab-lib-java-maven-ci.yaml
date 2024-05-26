@@ -23,7 +23,7 @@ jobs:
         servers: |
           [{
             "id": "github",
-            "username": "${{ secrets.G_USER }}",
+            "username": "tkjava",
             "password": "${{ secrets.G_TOKEN }}"
           }]
         mirrors: |
