@@ -43,7 +43,7 @@ jobs:
           uses: actions/upload-artifact@v4
           with:
             name: ${{ steps.package-name.outputs.package }}
-            path: ${{ github.workspace }}/target/${{ steps.package-name.outputs.package }}*.jar
+            path: ./target/${{ steps.package-name.outputs.package }}*.jar
             retention-days: 7
 
         - name: Listando arquivos
