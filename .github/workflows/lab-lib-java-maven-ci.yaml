@@ -31,7 +31,7 @@ jobs:
             "id": "github",
             "name": "Central Repository",
             "mirrorOf": "central",
-            "url": ${{ secrets.NEXUS_URL }}
+            "url": "https://maven.pkg.github.com/juliobsilva/lab-lib-java-maven"
           }]
         path: './settings.xml'
         override: false
