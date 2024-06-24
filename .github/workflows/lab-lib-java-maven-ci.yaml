@@ -23,15 +23,15 @@ jobs:
         servers: |
           [{
             "id": "github",
-            "username": "${{ secrets.G_USER }}",
-            "password": "${{ secrets.G_TOKEN }}"
+            "username": "${{ secrets.NEXUS_USERNAME }}",
+            "password": "${{ secrets.NEXUS_PASSWORD }}"
           }]
         mirrors: |
           [{
             "id": "github",
             "name": "Central Repository",
             "mirrorOf": "central",
-            "url": "https://maven.pkg.github.com/juliobsilva/lab-lib-java-maven"
+            "url": ${{ secrets.NEXUS_URL }}
           }]
         path: './settings.xml'
         override: false
