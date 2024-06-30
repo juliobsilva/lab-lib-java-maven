@@ -1,7 +1,7 @@
 name: Weekly Team Sync
 on:
   schedule:
-    - cron: 45 23 * * *
+    - cron: 00 12 * * *
   workflow_dispatch:
 
 jobs:
